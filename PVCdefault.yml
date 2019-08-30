@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-1gb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem # 'Filesystem' is default, can be skipped
+  resources:
+    requests:
+      storage: 1Gi

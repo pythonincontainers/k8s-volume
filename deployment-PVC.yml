@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-pvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-env
+  template:
+    metadata:
+      labels:
+        app: k8s-env
+    spec:
+      volumes:
+        - name: dynamic-volume
+          persistentVolumeClaim:
+            claimName: claim-1gb
+      containers:
+        - name: k8s-env
+          image: pythonincontainers/k8s-env:v1.0
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: dynamic-volume
+              mountPath: /data

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostpath
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-env
+  template:
+    metadata:
+      labels:
+        app: k8s-env
+    spec:
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
+        - name: minikube-hosts
+          hostPath:
+            path: /etc/hosts
+            type: File
+        - name: shared-vol
+          hostPath:
+            path: /tmp/shared-volume
+            type: DirectoryOrCreate
+      containers:
+        - name: k8s-env
+          image: pythonincontainers/k8s-env:v1.0
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+            - name: minikube-hosts
+              mountPath: /etc/hosts.minikube
+            - name: shared-vol
+              mountPath: /data
